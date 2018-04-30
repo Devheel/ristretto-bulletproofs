@@ -109,17 +109,13 @@ impl InnerProductProof {
             }
             // Parallelized calculation of each index of the vectors G and H.
             // G_L[i] = G_L[i] * u_inv + G_R[i] * u (for all i)
-            G_L.par_iter_mut()
-                .zip(G_R.par_iter())
-                .for_each(|(G_L_i, G_R_i)| {
-                    *G_L_i = ristretto::vartime::multiscalar_mul(&[u_inv, u], &[*G_L_i, *G_R_i]);
-                });
+            G_L.par_iter_mut().enumerate().for_each(|(i, G_L_i)| {
+                *G_L_i = ristretto::vartime::multiscalar_mul(&[u_inv, u], &[*G_L_i, G_R[i]]);
+            });
             // H_L[i] = H_L[i] * u + H_R[i] * u_inv (for all i)
-            H_L.par_iter_mut()
-                .zip(H_R.par_iter())
-                .for_each(|(H_L_i, H_R_i)| {
-                    *H_L_i = ristretto::vartime::multiscalar_mul(&[u, u_inv], &[*H_L_i, *H_R_i]);
-                });
+            H_L.par_iter_mut().enumerate().for_each(|(i, H_L_i)| {
+                *H_L_i = ristretto::vartime::multiscalar_mul(&[u, u_inv], &[*H_L_i, H_R[i]]);
+            });
 
             a = a_L;
             b = b_L;
