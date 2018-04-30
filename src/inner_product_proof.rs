@@ -1,5 +1,4 @@
 #![allow(non_snake_case)]
-
 #![doc(include = "../docs/inner-product-protocol.md")]
 
 use std::borrow::Borrow;
@@ -107,15 +106,24 @@ impl InnerProductProof {
                 a_L[i] = a_L[i] * u + u_inv * a_R[i];
                 b_L[i] = b_L[i] * u_inv + u * b_R[i];
             }
+
             // Parallelized calculation of each index of the vectors G and H.
             // G_L[i] = G_L[i] * u_inv + G_R[i] * u (for all i)
-            G_L.par_iter_mut().enumerate().for_each(|(i, G_L_i)| {
-                *G_L_i = ristretto::vartime::multiscalar_mul(&[u_inv, u], &[*G_L_i, G_R[i]]);
-            });
+            let scratch: Vec<_> = G_L.par_iter()
+                .zip(G_R.par_iter())
+                .map(|(G_L_i, G_R_i)| {
+                    ristretto::vartime::multiscalar_mul(&[u_inv, u], &[*G_L_i, *G_R_i])
+                })
+                .collect();
+            G_L.copy_from_slice(&scratch);
             // H_L[i] = H_L[i] * u + H_R[i] * u_inv (for all i)
-            H_L.par_iter_mut().enumerate().for_each(|(i, H_L_i)| {
-                *H_L_i = ristretto::vartime::multiscalar_mul(&[u, u_inv], &[*H_L_i, H_R[i]]);
-            });
+            let scratch: Vec<_> = H_L.par_iter()
+                .zip(H_R.par_iter())
+                .map(|(H_L_i, H_R_i)| {
+                    ristretto::vartime::multiscalar_mul(&[u, u_inv], &[*H_L_i, *H_R_i])
+                })
+                .collect();
+            H_L.copy_from_slice(&scratch);
 
             a = a_L;
             b = b_L;
