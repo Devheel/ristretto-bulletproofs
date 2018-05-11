@@ -15,9 +15,9 @@ use util;
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug)]
 pub struct ValueCommitment {
-    pub V: RistrettoPoint,
-    pub A: RistrettoPoint,
-    pub S: RistrettoPoint,
+    pub V_j: RistrettoPoint,
+    pub A_j: RistrettoPoint,
+    pub S_j: RistrettoPoint,
 }
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug)]
@@ -28,8 +28,8 @@ pub struct ValueChallenge {
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug)]
 pub struct PolyCommitment {
-    pub T_1: RistrettoPoint,
-    pub T_2: RistrettoPoint,
+    pub T_1_j: RistrettoPoint,
+    pub T_2_j: RistrettoPoint,
 }
 
 #[derive(Serialize, Deserialize, Copy, Clone, Debug)]
@@ -39,9 +39,6 @@ pub struct PolyChallenge {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct ProofShare {
-    pub value_commitment: ValueCommitment,
-    pub poly_commitment: PolyCommitment,
-
     pub t_x: Scalar,
     pub t_x_blinding: Scalar,
     pub e_blinding: Scalar,
@@ -50,6 +47,7 @@ pub struct ProofShare {
     pub r_vec: Vec<Scalar>,
 }
 
+/*
 impl ProofShare {
     pub fn verify_share(
         &self,
@@ -123,3 +121,4 @@ impl ProofShare {
         Ok(())
     }
 }
+*/

@@ -88,7 +88,11 @@ impl<'a> PartyAwaitingPosition<'a> {
         );
 
         // Return next state and all commitments
-        let value_commitment = ValueCommitment { V: self.V, A, S };
+        let value_commitment = ValueCommitment {
+            V_j: self.V,
+            A_j: A,
+            S_j: S,
+        };
         let next_state = PartyAwaitingValueChallenge {
             n: self.n,
             v: self.v,
@@ -165,7 +169,10 @@ impl<'a> PartyAwaitingValueChallenge<'a> {
             .pedersen_generators
             .commit(t_poly.2, t_2_blinding);
 
-        let poly_commitment = PolyCommitment { T_1, T_2 };
+        let poly_commitment = PolyCommitment {
+            T_1_j: T_1,
+            T_2_j: T_2,
+        };
 
         let papc = PartyAwaitingPolyChallenge {
             value_commitment: self.value_commitment,
@@ -221,8 +228,6 @@ impl PartyAwaitingPolyChallenge {
         let r_vec = self.r_poly.eval(pc.x);
 
         Ok(ProofShare {
-            value_commitment: self.value_commitment,
-            poly_commitment: self.poly_commitment,
             t_x_blinding,
             t_x,
             e_blinding,
