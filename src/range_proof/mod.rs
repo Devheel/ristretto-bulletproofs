@@ -204,17 +204,17 @@ impl RangeProof {
                 .chain(h)
                 .chain(x_sq.iter().cloned())
                 .chain(x_inv_sq.iter().cloned()),
-            iter::once(&self.A)
-                .chain(iter::once(&self.S))
-                .chain(value_commitments.iter())
-                .chain(iter::once(&self.T_1))
-                .chain(iter::once(&self.T_2))
-                .chain(iter::once(&gens.pedersen_generators.B_blinding))
-                .chain(iter::once(&gens.pedersen_generators.B))
-                .chain(gens.G.iter())
-                .chain(gens.H.iter())
-                .chain(self.ipp_proof.L_vec.iter())
-                .chain(self.ipp_proof.R_vec.iter()),
+            iter::once(self.A)
+                .chain(iter::once(self.S))
+                .chain(value_commitments.iter().cloned())
+                .chain(iter::once(self.T_1))
+                .chain(iter::once(self.T_2))
+                .chain(iter::once(gens.pedersen_generators.B_blinding))
+                .chain(iter::once(gens.pedersen_generators.B))
+                .chain(gens.G.iter().cloned())
+                .chain(gens.H.iter().cloned())
+                .chain(self.ipp_proof.L_vec.iter().cloned())
+                .chain(self.ipp_proof.R_vec.iter().cloned()),
         );
 
         if mega_check.is_identity() {
