@@ -14,6 +14,7 @@ extern crate rand;
 extern crate sha2;
 extern crate subtle;
 extern crate tiny_keccak;
+extern crate petgraph;
 
 #[macro_use]
 extern crate serde_derive;
@@ -32,6 +33,7 @@ mod generators;
 mod inner_product_proof;
 mod proof_transcript;
 mod range_proof;
+mod circuit;
 
 pub use generators::{Generators, GeneratorsView, PedersenGenerators};
 pub use proof_transcript::ProofTranscript;
